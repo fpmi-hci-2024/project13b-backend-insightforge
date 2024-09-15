@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - includeAll:
+      path: scripts/1
+      relativeToChangelogFile: true
