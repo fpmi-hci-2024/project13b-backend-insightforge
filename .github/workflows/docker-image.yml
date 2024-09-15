@@ -20,7 +20,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag bookstore:${{ github.sha }}
+      run: docker build . --file Dockerfile --tag sematech/bookstore:${{ github.sha }}
 
     - name: Push Docker image
-      run: docker push bookstore:${{ github.sha }}
+      run: docker push sematech/bookstore:${{ github.sha }}
