@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bookstore
+    username: postgres
+    password: password
+    driverClassName: org.postgresql.Driver
+    hikari:
+      connection-timeout: 300000
+      maximum-pool-size: 10
+  server:
+    port: ${PORT:8080}
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+http-connection-pool:
+  max-connections-count: 150
+  connect-timeout: 120000 # ms
+  socket-timeout: 120000 # ms
+  read-timeout: 120000 # ms
+  write-timeout: 10000 # ms
+  max-idle-time: 20 # seconds
+  max-life-time: 10 # minutes
+  pending-acquire-timeout: 40 # seconds
+  evict-in-background: 120 # seconds
+
+jwt:
+  secret: 'dasihfoisdy32894ywehlqwedhyweydasoij'
+  accessExpirationMs: 2592000000
+  refreshExpirationMs: 4320000000
