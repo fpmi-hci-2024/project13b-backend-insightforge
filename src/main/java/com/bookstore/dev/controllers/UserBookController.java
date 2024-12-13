@@ -3,6 +3,11 @@ package com.bookstore.dev.controllers;
 import com.bookstore.dev.configs.exception.ApiException;
 import com.bookstore.dev.domain.dto.BookResponse;
 import com.bookstore.dev.services.entity_services.book.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +21,20 @@ import java.util.Optional;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api/v1/books")
 @RequiredArgsConstructor
+@SecurityScheme(
+        name = "tokenAuth",
+        type = SecuritySchemeType.APIKEY,
+        in = SecuritySchemeIn.HEADER,
+        paramName = "Authorization",
+        description = "Token-based Authentication"
+)
 public class UserBookController {
     private final BookService bookService;
 
     @GetMapping("/{id}")
+    @Operation(security = {@SecurityRequirement(name = "tokenAuth")})
     public ResponseEntity<?> getBookById(@PathVariable("id") @Min(1) Long id) {
         Optional<BookResponse> book = bookService.getBookById(id);
         if (book.isPresent()) {
@@ -32,6 +45,7 @@ public class UserBookController {
     }
 
     @GetMapping
+    @Operation(security = {@SecurityRequirement(name = "tokenAuth")})
     public ResponseEntity<?> getBooks(
             @RequestParam Optional<@Size(min = 3) String> title,
             @RequestParam Optional<@Size(min = 1) String> author,
@@ -50,6 +64,7 @@ public class UserBookController {
     }
 
     @GetMapping("/by-page")
+    @Operation(security = {@SecurityRequirement(name = "tokenAuth")})
     public ResponseEntity<?> getBooksByPage(@RequestParam Integer page, @RequestParam Integer size) {
         return ok(bookService.getAllBooksPaginated(page, size));
     }
