@@ -21,3 +21,8 @@ http-connection-pool:
   max-life-time: 10 # minutes
   pending-acquire-timeout: 40 # seconds
   evict-in-background: 120 # seconds
+
+jwt:
+  secret: 'dasihfoisdy32894ywehlqwedhyweydasoij'
+  accessExpirationMs: 2592000000
+  refreshExpirationMs: 4320000000

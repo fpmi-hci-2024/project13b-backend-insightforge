@@ -35,6 +35,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     /* OpenAPI 3.0 */
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.3.0'
@@ -49,6 +50,9 @@ dependencies {
     implementation "org.liquibase:liquibase-core:4.24.0"
     liquibaseRuntime "org.liquibase:liquibase-core:4.24.0"
     liquibaseRuntime "org.liquibase:liquibase-groovy-dsl:3.0.1"
+
+    /* JWT */
+    implementation group: 'com.auth0', name: 'java-jwt', version: '3.18.2'
 }
 
 tasks.named('test') {
