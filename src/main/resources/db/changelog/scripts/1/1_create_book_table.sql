@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS books
     description TEXT         NOT NULL,
     poster      VARCHAR(500) NOT NULL,
     author_id   BIGINT,
+    stock BIGINT,
     CONSTRAINT fk_author
         FOREIGN KEY (author_id)
             REFERENCES authors (id)

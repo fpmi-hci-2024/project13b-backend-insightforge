@@ -34,4 +34,6 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
     private List<Genre> genres;
+    @Column(nullable = false)
+    private Integer stock;
 }

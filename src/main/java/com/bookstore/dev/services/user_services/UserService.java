@@ -8,6 +8,7 @@ import com.bookstore.dev.domain.entities.users.EUserRole;
 import com.bookstore.dev.domain.entities.users.User;
 import com.bookstore.dev.domain.repositories.RoleRepository;
 import com.bookstore.dev.domain.repositories.UserRepository;
+import com.bookstore.dev.services.UserAuthenticateService;
 import com.bookstore.dev.services.entity_services.token.UserTokenService;
 import com.bookstore.dev.services.utils.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 import static com.bookstore.dev.services.utils.security.PasswordUtils.isPasswordRight;
@@ -27,6 +29,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final UserTokenService userTokenService;
+    private final UserAuthenticateService userAuthenticateService;
 
     public User registerNewUser(UserRegistrationRequest user) {
         if (userRepository.existsByUsername(user.getUsername())) {
@@ -56,5 +59,12 @@ public class UserService {
         String refreshToken = jwtService.createJwtRefreshToken(user.getUsername());
 
         return userTokenService.createNewToken(accessToken, refreshToken, user);
+    }
+
+    public User getUserInContext() {
+        return Optional.ofNullable(userAuthenticateService.getAuthenticatedUserIdFromAuthentication())
+                .map(Long::valueOf)
+                .flatMap(userRepository::findById)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Not found user in context"));
     }
 }

@@ -2,7 +2,10 @@ package com.bookstore.dev.controllers;
 
 import com.bookstore.dev.configs.exception.ApiException;
 import com.bookstore.dev.domain.dto.BookResponse;
+import com.bookstore.dev.domain.entities.cart.Order;
 import com.bookstore.dev.services.entity_services.book.BookService;
+import com.bookstore.dev.services.user_services.CartService;
+import com.bookstore.dev.services.user_services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -32,6 +35,8 @@ import static org.springframework.http.ResponseEntity.ok;
 )
 public class UserBookController {
     private final BookService bookService;
+    private final CartService cartService;
+    private final OrderService orderService;
 
     @GetMapping("/{id}")
     @Operation(security = {@SecurityRequirement(name = "tokenAuth")})
@@ -67,5 +72,30 @@ public class UserBookController {
     @Operation(security = {@SecurityRequirement(name = "tokenAuth")})
     public ResponseEntity<?> getBooksByPage(@RequestParam Integer page, @RequestParam Integer size) {
         return ok(bookService.getAllBooksPaginated(page, size));
+    }
+
+    @PostMapping("/cart/add")
+    @Operation(security = {@SecurityRequirement(name = "tokenAuth")})
+    public void addToCart(@RequestParam Long bookId,
+                          @RequestParam Integer quantity) {
+        cartService.addToCart(bookId, quantity);
+    }
+
+    @PostMapping("/cart/remove")
+    @Operation(security = {@SecurityRequirement(name = "tokenAuth")})
+    public void removeFromCart(@RequestParam Long bookId) {
+        cartService.removeFromCart(bookId);
+    }
+
+    @PostMapping("/order")
+    @Operation(security = {@SecurityRequirement(name = "tokenAuth")})
+    public ResponseEntity<?> placeOrder() {
+        return ok(orderService.placeOrder());
+    }
+
+    @GetMapping("/orders")
+    @Operation(security = {@SecurityRequirement(name = "tokenAuth")})
+    public ResponseEntity<List<Order>> getOrderHistory() {
+        return ok(orderService.getOrderHistory());
     }
 }
